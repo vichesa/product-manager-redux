@@ -26,6 +26,17 @@ export const saveProducts = createAsyncThunk(
   }
 );
 
+export const updateProducts = createAsyncThunk(
+  'products/updateProducts',
+  async ({ name, qty, picture, expiredAt, isActive, id }) => {
+    const response = await axios.patch(
+      `https://60cb2f6921337e0017e440a0.mockapi.io/product/${id}`,
+      { name, qty, picture, expiredAt, isActive }
+    );
+    return response.data;
+  }
+);
+
 const productEntity = createEntityAdapter({
   selectId: (product) => product.id,
 });
@@ -39,6 +50,12 @@ const productSlice = createSlice({
     },
     [saveProducts.fulfilled]: (state, action) => {
       productEntity.addOne(state, action.payload);
+    },
+    [updateProducts.fulfilled]: (state, action) => {
+      productEntity.updateOne(state, {
+        id: action.payload.id,
+        updates: action.payload,
+      });
     },
   },
 });

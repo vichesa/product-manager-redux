@@ -11,11 +11,10 @@ const AddNewProduct = () => {
   const [qty, setQty] = useState();
   const [picture, setPicture] = useState('');
   const [expiredAt, setExpiredAt] = useState('');
+  const [id, setId] = useState('');
+  const [isActive, setIsActive] = useState(true);
 
   const products = useSelector(productSelector.selectAll);
-
-  const id = products[products.length].id + 1;
-  const isActive = true;
 
   const createProduct = async (e) => {
     e.preventDefault();
@@ -23,11 +22,12 @@ const AddNewProduct = () => {
       saveProducts({ name, qty, picture, expiredAt, isActive, id })
     );
     navigate('/');
+
+    console.log(products);
   };
 
   return (
     <div>
-      <h1>gtuygjh</h1>
       <form className="box mt-5" onSubmit={createProduct}>
         <div className="field">
           <label className="label">Name of Product</label>
@@ -57,6 +57,22 @@ const AddNewProduct = () => {
             type="text"
             value={expiredAt}
             onChange={(e) => setExpiredAt(e.target.value)}
+          />
+          <input
+            className="input"
+            type="text"
+            value={id}
+            onChange={(e) => setId(products[products.length].id + 1)}
+            disabled
+            hidden
+          />
+          <input
+            className="input"
+            type="text"
+            value={isActive}
+            onChange={(e) => setIsActive(true)}
+            disabled
+            hidden
           />
           <button className="button is-primary mt-5">Add Product</button>
         </div>
