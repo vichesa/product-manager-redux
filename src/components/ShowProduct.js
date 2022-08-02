@@ -1,11 +1,17 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { getProducts, productSelector } from '../features/productSlice';
+import { Link, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import {
+  deleteProduct,
+  getProducts,
+  productSelector,
+} from '../features/productSlice';
 
 const ShowProduct = () => {
   const dispatch = useDispatch();
   const products = useSelector(productSelector.selectAll);
+  const { id } = useParams();
 
   useEffect(() => {
     dispatch(getProducts({}));
@@ -43,12 +49,36 @@ const ShowProduct = () => {
               </td>
               <td>
                 <Link
-                  to={`edit/$product.id`}
+                  to={`edit/${product.id}`}
                   className="button is-info is-small"
                 >
                   Edit
                 </Link>
-                <button className="button is-danger is-small">Delete</button>
+                <button
+                  onClick={() =>
+                    Swal.fire({
+                      title: 'Are you sure?',
+                      text: "You won't be able to revert this!",
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Yes, delete it!',
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        dispatch(deleteProduct(product.id));
+                        Swal.fire(
+                          'Deleted!',
+                          'Your file has been deleted.',
+                          'success'
+                        );
+                      }
+                    })
+                  }
+                  className="button is-danger is-small"
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}

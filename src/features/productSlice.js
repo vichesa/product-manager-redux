@@ -37,6 +37,16 @@ export const updateProducts = createAsyncThunk(
   }
 );
 
+export const deleteProduct = createAsyncThunk(
+  'products/deleteProducts',
+  async (id) => {
+    await axios.delete(
+      `https://60cb2f6921337e0017e440a0.mockapi.io/product/${id}`
+    );
+    return id;
+  }
+);
+
 const productEntity = createEntityAdapter({
   selectId: (product) => product.id,
 });
@@ -57,6 +67,14 @@ const productSlice = createSlice({
         updates: action.payload,
       });
     },
+    [deleteProduct.fulfilled]: (state, action) => {
+      productEntity.removeOne(state, action.payload);
+    },
+    // deleteUser: (state, action) => {
+    //   state.value = state.value.filter(
+    //     (product) => product.id !== action.payload.id
+    //   );
+    // },
   },
 });
 

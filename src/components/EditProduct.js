@@ -5,8 +5,7 @@ import {
   productSelector,
   updateProducts,
 } from '../features/productSlice';
-import { useNavigate } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const EditProduct = () => {
   const dispatch = useDispatch();
@@ -38,7 +37,9 @@ const EditProduct = () => {
 
   const editProduct = async (e) => {
     e.preventDefault();
-    await dispatch(updateProducts({ name, qty, picture, expiredAt, isActive }));
+    await dispatch(
+      updateProducts({ id, name, qty, picture, expiredAt, isActive })
+    );
     navigate('/');
 
     console.log(product);
